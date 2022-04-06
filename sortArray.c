@@ -2,7 +2,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-int main( int argc, char *argv[] )  {
+void sort(int [], int, int);
+
+int main(int argc, char *argv[] )  {
     // open file
     char *filename = argv[1];
     FILE *fp = fopen(filename, "r");
@@ -47,6 +49,8 @@ int main( int argc, char *argv[] )  {
 		ptr = strtok(NULL, delim);
 	}
    
+   sort(even, 0, even_i - 1);
+   sort(odd, 0, odd_i - 1);
 
     // print out even numbers
 	for (int i = 0; i < even_i; i++)
@@ -67,19 +71,37 @@ int main( int argc, char *argv[] )  {
 
     return 0;
 
+}
+
+// quick sort
+void sort(int arr[], int low, int high){
+    int pivot, value1, value2, temp;
+    if (low < high){
+        pivot = low;
+        value1 = low;
+        value2 = high;
+
+        while (value1 < value2){
+            while (arr[value1] <= arr[pivot] && value1 <= high){
+                value1++;
+            }
     
+            while (arr[value2] > arr[pivot] && value2 >= low){
+                value2--;
+            }
 
-    // while (fgets(str, MAX_LENGTH, fp))
-    //     printf("%s", str);
+            if (value1 < value2){
+                temp = arr[value1];
+                arr[value1] = arr[value2];
+                arr[value2] = temp;
+            }
+        }
+    
+        temp = arr[value2];
+        arr[value2] = arr[pivot];
+        arr[pivot] = temp;
 
-//    if( argc == 2 ) {
-//       printf("The argument supplied is %s\n", argv[1]);
-//    }
-//    else if( argc > 2 ) {
-//       printf("Too many arguments supplied.\n");
-//    }
-//    else {
-//       printf("One argument expected.\n");
-//    }
-
+        sort(arr, low, value2 - 1);
+        sort(arr, value2 + 1, high);
+    }
 }
