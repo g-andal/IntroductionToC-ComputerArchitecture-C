@@ -14,8 +14,8 @@ int main( int argc, char *argv[] )  {
     fgets(str, 20, fp);
 
     int length = atoi(str);
-    int num[length];
-    int index = 0;
+    int even[length];
+    int odd[length];
 
     // read second line (all of the elements)
     fgets(str, 20, fp);
@@ -25,21 +25,40 @@ int main( int argc, char *argv[] )  {
 	char delim[] = " ";
 
 	char *ptr = strtok(str, delim);
+    int new_num;
+    int even_i = 0; // keeps track of latest index in even array
+    int odd_i = 0;  // keeps track of latest index in odd array
 
 	while(ptr != NULL)      // while loop to break string apart at spaces
 	{
-        // puts every element into num
-		int new_num = atoi(ptr);
-        num[index] = new_num;
-        index++;
+        // changes num from string to int
+		new_num = atoi(ptr);
 
+        // places number into respective array (even or odd)
+        if(new_num % 2 == 0){
+            even[even_i] = new_num;
+            even_i++;
+        }
+        else{
+            odd[odd_i] = new_num;
+            odd_i++;
+        }
+        
 		ptr = strtok(NULL, delim);
 	}
+   
 
-    // loop to print out elements in num
-	for (int i = 0; i < length; i++)
+    // print out even numbers
+	for (int i = 0; i < even_i; i++)
 	{
-		printf("%d ", num[i]);
+		printf("%d ", even[i]);
+        
+	}
+
+    // print out odd numbers
+    for (int i = 0; i < odd_i; i++)
+	{
+		printf("%d ", odd[i]);
 	}
 	printf("\n");
 
