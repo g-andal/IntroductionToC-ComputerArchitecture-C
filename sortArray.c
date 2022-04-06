@@ -75,33 +75,41 @@ int main(int argc, char *argv[] )  {
 
 // quick sort
 void sort(int arr[], int low, int high){
-    int pivot, value1, value2, temp;
+    int pivot, low_i, high_i, temp;
+
+    // breaks recursion if low >= high
     if (low < high){
-        pivot = low;
-        value1 = low;
-        value2 = high;
+        pivot = low; // pivot will be first element
+        low_i = low;
+        high_i = high;
 
-        while (value1 < value2){
-            while (arr[value1] <= arr[pivot] && value1 <= high){
-                value1++;
-            }
-    
-            while (arr[value2] > arr[pivot] && value2 >= low){
-                value2--;
+        // keep going until we've seen all the elements in this partition
+        while (low_i < high_i){
+            // low index will keep incrementing as long as each element < pivot
+            while (arr[low_i] <= arr[pivot] && low_i <= high){
+                low_i++;
             }
 
-            if (value1 < value2){
-                temp = arr[value1];
-                arr[value1] = arr[value2];
-                arr[value2] = temp;
+            // high index will keep decrementing as long as each element > pivot
+            while (arr[high_i] > arr[pivot] && high_i >= low){
+                high_i--;
+            }
+            
+            // both high and low i aren't the same number then switch the values at those indeces
+            if (low_i < high_i){
+                temp = arr[low_i];
+                arr[low_i] = arr[high_i];
+                arr[high_i] = temp;
             }
         }
     
-        temp = arr[value2];
-        arr[value2] = arr[pivot];
+        // switch pivot and last element in the low section
+        temp = arr[high_i];
+        arr[high_i] = arr[pivot];
         arr[pivot] = temp;
 
-        sort(arr, low, value2 - 1);
-        sort(arr, value2 + 1, high);
+        // sort low section and high section
+        sort(arr, low, high_i - 1);
+        sort(arr, high_i + 1, high);
     }
 }
