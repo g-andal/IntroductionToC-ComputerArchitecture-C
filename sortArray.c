@@ -119,24 +119,16 @@ void print(int* even, int even_i, int* odd, int odd_i){
 // quick sort
 void sort(int* arr, int low, int high){
     int pivot, low_i, high_i, temp;
-    
-    for (int i = 0; i < high+1; i++)
-	{
-		printf("%d\t", arr[i]);
-	}
-    printf("\n");
 
     // breaks recursion if low >= high
     if (low < high){
         pivot = low; // pivot will be first element
         low_i = low;
         high_i = high;
-        printf("pivot-%d\n", pivot);
-        printf("low-%d\n", low);
-        printf("high-%d\n", high);
+   
         // keep going until we've seen all the elements in this partition
         while (low_i < high_i){
-            printf("lowi-%d \t highi-%d", low, high);
+            
             // low index will keep incrementing as long as each element < pivot
             while (arr[low_i] <= arr[pivot] && low_i <= high_i){
                 low_i++;
@@ -154,7 +146,7 @@ void sort(int* arr, int low, int high){
                 arr[high_i] = temp;
             }
         }
-        printf("\n");
+        
         // switch pivot and last element in the low section
         temp = arr[high_i];
         arr[high_i] = arr[pivot];
