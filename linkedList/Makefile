@@ -1,4 +1,4 @@
-CC=gcc
+CC=cc
 CFLAGS=-g -Wall -Werror -fsanitize=address
 list: linkedList.o
 	$(CC) $(CFLAGS) -o $@ $^

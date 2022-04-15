@@ -5,9 +5,11 @@
 
 struct node *head = NULL;
 struct node *current = NULL;
+int size = 0;
 
 void insert(int);
 void delete(int);
+void printList();
 
 int main(int argc, char *argv[] )  {
     FILE *fp = fopen(argv[1], "r");
@@ -23,15 +25,15 @@ int main(int argc, char *argv[] )  {
     while(!feof(fp)){
         fscanf(fp, "%c\t%d\n", &instr, &num);
         if (instr == 'i'){
-            printf("going into insert\n");
             insert(num);
-            printf("succesful insert of %d\n", num);
         }
         else{
-            printf("going into delete\n");
             delete(num);
-            printf("succesful delete of %d\n", num);
         }
+    }
+    printf("%d\n", size);
+    if(head != NULL){
+        printList();
     }
 
     fclose(fp);
@@ -50,6 +52,7 @@ void insert(int data) {
         new->next = head;
         head = new;
         current = head;
+        size++;
         return;
     }
 
@@ -64,6 +67,7 @@ void insert(int data) {
         current = current->next;
     }
     current = head;
+    size++;
 }
 
 void delete(int data) {
@@ -74,18 +78,45 @@ void delete(int data) {
     if(head->data == data){
         head = head->next;
         current = head;
+        size--;
         return;
     }
 
     while(current->next!= NULL){
         if(current->next->data == data){
             current->next = current->next->next;
+            size--;
             break;
         }
         current = current->next;
     }
 
     current = head;
+}
+
+void printList(){
+    printf("%d\t", current->data);
+    int lastPrinted = current->data;
+    current = current->next;
+    free(head);
+    head = current;
+    while(true){
+        if(current->data != lastPrinted){
+            printf("%d\t", current->data);
+            lastPrinted = current->data;
+        }
+
+        if(current->next != NULL){
+            current = current->next;
+            free(head);
+            head = current;
+        }
+        else{
+            free(head);
+            break;
+        }
+    }
+    printf("\n");
 }
 
 
