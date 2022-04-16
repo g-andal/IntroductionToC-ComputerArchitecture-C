@@ -9,15 +9,16 @@ int hashCode(int);
 void init_table();
 bool search(int);
 void insert(int);
+void freeTable();
 
-struct Node{
+typedef struct Node{
    int data;   
    struct Node* next;
-};
+}Node;
 
 typedef struct{
     int num_of_items;
-    struct Node** table_entries;
+    Node** table_entries;
 }Hashtable;
 
 Hashtable table;
@@ -34,6 +35,7 @@ int main(int argc, char *argv[]){
 
     char instr; // i: insert; s: search
     int num;    // value to add or search for
+    init_table();
 
     while(!feof(fp)){
         fscanf(fp, "%c\t%d\n", &instr, &num);
@@ -44,6 +46,14 @@ int main(int argc, char *argv[]){
             search(num);
         }
     }
+
+
+    printf("%d\n", inserts);
+    printf("%d\n", searches);
+    freeTable();
+
+    fclose(fp);
+    return 0;
 
 }
 
@@ -56,7 +66,7 @@ int hashCode(int key) {
 }
 
 void init_table(){
-    table.table_entries = malloc(sizeof(struct Node*) * MAX_SIZE);
+    table.table_entries = malloc(sizeof(Node*) * MAX_SIZE);
     table.num_of_items = 0;
 	for (int i = 0; i < MAX_SIZE; i++){
 		table.table_entries[i] = NULL;
@@ -64,7 +74,7 @@ void init_table(){
 }
 
 bool search(int data){
-    struct Node* cur = table.table_entries[hashCode(data)];
+    Node* cur = table.table_entries[hashCode(data)];
     while(cur != NULL){
         if(cur->data == data){
             searches++;
@@ -78,12 +88,29 @@ bool search(int data){
 void insert(int data){
     int key = hashCode(data);
     if(!search(data)){
-        struct Node* head = table.table_entries[key];
-        struct Node* temp = malloc(sizeof(struct Node));
+        Node* head = table.table_entries[key];
+        Node* temp = malloc(sizeof(Node));
         temp->data = data;
         temp->next = head;
         table.table_entries[key] = temp;
 
-        inserts++;
+        if(head != NULL){
+            inserts++;
+        }
+    }
+}
+
+void freeTable(){
+    for(int i = 0; i < MAX_SIZE; i++){
+        if (table.table_entries[i] != NULL){
+            Node* head = table.table_entries[i];
+            Node* temp = head->next;
+            free(head);
+            while(temp != NULL){
+                head = temp;
+                temp = temp->next;
+                free(head);
+            }
+        }
     }
 }
