@@ -7,19 +7,45 @@
 
 int hashCode(int);
 void init_table();
-bool searchList(int);
+bool search(int);
+void insert(int);
 
-typedef struct{
+struct Node{
    int data;   
    struct Node* next;
-}Node;
+};
 
 typedef struct{
     int num_of_items;
-    Node** table_entries;
+    struct Node** table_entries;
 }Hashtable;
 
 Hashtable table;
+int searches = 0;
+int inserts = 0;
+
+int main(int argc, char *argv[]){
+    FILE *fp = fopen(argv[1], "r");
+    if (fp == NULL)
+    {
+        printf("error\n");
+        return 1;
+    }
+
+    char instr; // i: insert; s: search
+    int num;    // value to add or search for
+
+    while(!feof(fp)){
+        fscanf(fp, "%c\t%d\n", &instr, &num);
+        if (instr == 'i'){
+            insert(num);
+        }
+        else{
+            search(num);
+        }
+    }
+
+}
 
 int hashCode(int key) {
    int code = key % MAX_SIZE;
@@ -30,17 +56,18 @@ int hashCode(int key) {
 }
 
 void init_table(){
-    table.table_entries = malloc(sizeof(Node*) * MAX_SIZE);
+    table.table_entries = malloc(sizeof(struct Node*) * MAX_SIZE);
     table.num_of_items = 0;
 	for (int i = 0; i < MAX_SIZE; i++){
 		table.table_entries[i] = NULL;
 	}
 }
 
-bool searchList(int data){
-    Node* cur = table.table_entries[hashCode(data)];
+bool search(int data){
+    struct Node* cur = table.table_entries[hashCode(data)];
     while(cur != NULL){
         if(cur->data == data){
+            searches++;
             return true;
         }
         cur = cur->next;
@@ -48,17 +75,15 @@ bool searchList(int data){
     return false;
 }
 
-void insertFirst(int data){
+void insert(int data){
     int key = hashCode(data);
-    if(!searchList(data)){
-        Node* head = table.table_entries[key];
-        Node* temp = malloc(sizeof(Node));
+    if(!search(data)){
+        struct Node* head = table.table_entries[key];
+        struct Node* temp = malloc(sizeof(struct Node));
         temp->data = data;
         temp->next = head;
         table.table_entries[key] = temp;
+
+        inserts++;
     }
-}
-
-int main(){
-
 }
