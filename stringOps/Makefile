@@ -1,10 +1,10 @@
 CC=gcc
 CFLAGS=-g -Wall -Werror -fsanitize=address
-sort: sortArray.o
+string: stringOps.o
 	$(CC) $(CFLAGS) -o $@ $^
-sortArray.o: sortArray.c
+stringOps.o: stringOps.c
 	$(CC) $(CFLAGS) -c $<
 clean:
-	rm -f -r sort
+	rm -f -r string
 	rm -f -r *.o
 	clear
