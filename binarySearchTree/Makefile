@@ -1,10 +1,10 @@
 CC=cc
 CFLAGS=-g -Wall -Werror -fsanitize=address
-hash: hashTable.o
+bts: bts.o
 	$(CC) $(CFLAGS) -o $@ $^
-hashTable.o: hashTable.c
+bts.o: bts.c
 	$(CC) $(CFLAGS) -c $<
 clean:
-	rm -f -r hash
+	rm -f -r bts
 	rm -f -r *.o
 	clear
